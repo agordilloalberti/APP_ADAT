@@ -4,6 +4,7 @@ import com.es.aplicacion.dto.LoginUsuarioDTO
 import com.es.aplicacion.dto.UsuarioDTO
 import com.es.aplicacion.dto.UsuarioRegisterDTO
 import com.es.aplicacion.error.exception.UnauthorizedException
+import com.es.aplicacion.model.Usuario
 import com.es.aplicacion.service.TokenService
 import com.es.aplicacion.service.UsuarioService
 import jakarta.servlet.http.HttpServletRequest
@@ -14,11 +15,10 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/Usuarios")
 class UsuarioController {
 
     @Autowired
@@ -34,9 +34,13 @@ class UsuarioController {
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
     ) : ResponseEntity<UsuarioDTO>?{
 
-        // TODO: Implementar este metodo
+        if (usuarioRegisterDTO.password != usuarioRegisterDTO.passwordRepeat){
+            throw UnauthorizedException("Las contraseñas no coinciden")
+        }
 
-        return ResponseEntity(null, HttpStatus.CREATED)
+        val user = usuarioService.insertUser(usuarioRegisterDTO)
+
+        return ResponseEntity(user, HttpStatus.CREATED)
 
     }
 
