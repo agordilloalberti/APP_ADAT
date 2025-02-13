@@ -61,4 +61,9 @@ class UsuarioController {
         return ResponseEntity(mapOf("token" to token), HttpStatus.CREATED)
     }
 
+    @GetMapping("/")
+    fun hola(): String{
+        return "<h1>HOLA MUNDO</h1>"
+    }
+
 }
